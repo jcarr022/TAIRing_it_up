@@ -1,0 +1,11 @@
+module load samtools
+module load bcftools
+samtools faidx TAIR10.fas Chr4 > TAIR10_4.fas # pull only Chr4 sequence from Fasta file
+samtools view Bur_0.bam chr4 > Bur_0.Chr4.bam #Isolate Chr4 for analysis
+samtools sort Bur_0.Chr4.bam Bur_0.Chr4.sorted #sort BAM file
+samtools index Bur_0.Chr4.sorted.bam # index bam
+samtools mpileup -u -f TAIR10_4.fas Bur_0.Chr4.sorted.bam > Bur_0.Chr4.bcf #Call Variants
+bcftools view Bur_0.Chr4.bcf > Bur_0.Chr4.vcf #compile a readable VCF including reference files
+bcftools view -v snps Bur_0.Chr4.bcf > Bur_0.Chr4.vcf #compile a readable VCF displaying only snps
+#use less (yourfile) to view vcf files once created
+# VCF file shows what location SNPs are present compared to TAIR10
